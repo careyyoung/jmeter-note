@@ -1,0 +1,38 @@
+基础知识：http://www.cnblogs.com/fnng/archive/2012/12/21/2828440.html
+1. 测试服务器：
+	cd  C:\Users\carey.yang\git\personal_blog
+	python manage.py runserver 9999 --settings=personal_blog.settings.dev
+	
+2. 需要认证登录，才能访问该服务器，不然会报403
+	oauth认证需要外置组件：
+	https://github.com/ATLANTBH/jmeter-components/
+	下载源代码，在根目录执行：mvn clean install，完成后，需要：
+	1. 将'target'目录生成对应的jar包(atlantbh-components-1.0.0-SNAPSHOT.jar)，放置到jmeter的：/lib/ext
+	2. 将'target/lib'目录中的jar包，，放置到jmeter的：/lib
+	3. 重启jmeter，会有：JMeter menu -> Edit -> Add -> Sampler -> OAuth Sampler
+	
+3. 服务器的性能指标监控插件：PerfMon
+	下载：http://jmeter-plugins.org/downloads/all/
+	1. 将JMeterPlugins-Extras.jar、JMeterPlugins-Standard.jar，放到jmeter的：/lib/extext
+	2. 将ServerAgent-2.2.1.zip，放到要监控的服务器上，服务器上需要有jdk。
+	
+	
+4. 测试mysql服务器：
+	配置mysql jdbc： http://www.cnblogs.com/zhuque/archive/2012/11/20/2779267.html
+	1. database url： jdbc:mysql://localhost:3306/blog?user=root&password=root
+	2. database class： com.mysql.jdbc.Driver
+	note：JDBC Connection Configuration中配置的variable name bound to pool名用到后续中各个JDBC Request，表示共享一个数据库连接池。
+	
+
+5. 普通登录：
+	使用firefox、chrome检查登录链接，使用的登录方式：post，需要的参数：Parameters：username/password
+	需要cookies支持，之后线程组的线程共有该cookies，直接添加http cookies manager即可，不用配置。
+	
+6. 设置默认http 请求：
+	1.添加：Http Request Defaults，把通用的值填上，后续就不用填了，如：ip、port、protocol、content-encoding
+	
+7. 常见的逻辑控制器：
+	Once Only Controller：表示在该控制器下的Http Request，每个Thread只做一次，不会循环loop；比如：主页和登录
+	Interleave Controller（交替控制器）：表示在该控制器下的Http Request，Thread会依次执行，而不是乱序执行
+	
+	
